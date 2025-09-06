@@ -1,4 +1,4 @@
-import type { ProductType } from "../types/Product";
+import type { ProductType } from "../types/product";
 
 export function getProducts(): Promise<ProductType[]> {
   return fetch("https://fakestoreapi.com/products")
@@ -9,7 +9,6 @@ export function getProducts(): Promise<ProductType[]> {
       return response.json();
     })
     .then((data: ProductType[]) => {
-      console.log(data);
       return data;
     });
 }
