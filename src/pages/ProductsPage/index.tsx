@@ -59,7 +59,7 @@ export function ProductsPage() {
                 : "font-medium text-gray-600 hover:text-gray-900"
             }`}
           >
-            Все
+            All
           </button>
           <button
             onClick={() => setFilter("fav")}
@@ -69,7 +69,7 @@ export function ProductsPage() {
                 : "font-medium text-gray-600 hover:text-gray-900"
             }`}
           >
-            Избранное
+            Favourite
           </button>
         </div>
       </div>
