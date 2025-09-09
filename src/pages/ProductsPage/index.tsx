@@ -1,31 +1,38 @@
-import { useEffect, useState, MouseEvent } from "react";
+import { useEffect, useState } from "react";
 import { getProducts } from "../../shared/api/products";
-import type { ProductType } from "../../shared/types/product";
 import type { ViewFilter } from "../../shared/types/filter";
+import { useAppDispatch, useAppSelector } from "../../app/store/hooks/hooks";
+import {
+  removeProduct,
+  setProducts,
+} from "../../app/store/slices/productSlice";
 
 export function ProductsPage() {
-  const [products, setProducts] = useState<ProductType[]>([]);
   const [favs, setFavs] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<ViewFilter>("all");
 
+  const { products } = useAppSelector((state) => state.productsSlice);
+
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     getProducts()
-      .then((data) => setProducts(data))
+      .then((data) => dispatch(setProducts(data)))
       .catch((err) => console.error("API ERROR:", err));
   }, []);
 
   /* Переключение избранного */
 
-  const toggleFav = (e: MouseEvent, id: string) => {
+  const toggleFav = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     setFavs((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   /* Удаление карточки */
 
-  const removeCard = (e: MouseEvent, id: string) => {
+  const removeCard = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    setProducts((prev) => prev.filter((p) => String(p.id) !== String(id)));
+    dispatch(removeProduct(id));
   };
 
   /* Фильтрация карточек */
