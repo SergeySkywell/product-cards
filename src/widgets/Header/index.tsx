@@ -11,7 +11,6 @@ export function Header() {
     <header className="bg-white border-b border-gray-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
-          {/* Логотип / название */}
           <div className="text-base font-bold tracking-tight text-gray-900">
             Products App
           </div>

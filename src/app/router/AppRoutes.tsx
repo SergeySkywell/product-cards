@@ -9,6 +9,7 @@ export const AppRoutes = () => {
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/products/:id" element={<ProductPage />} />
       <Route path="/create-product" element={<CreateProductPage />} />
+      <Route path="*" element={<ProductsPage />} />
     </Routes>
   );
 };
