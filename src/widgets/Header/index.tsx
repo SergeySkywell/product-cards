@@ -23,7 +23,7 @@ export function Header() {
                 pathname === "/products" ? linkActive : linkInactive
               }`}
             >
-              Products
+              Продукты
             </Link>
 
             <Link
@@ -32,7 +32,7 @@ export function Header() {
                 pathname === "/create-product" ? linkActive : linkInactive
               }`}
             >
-              Create Product
+              Добавить продукт
             </Link>
           </nav>
         </div>

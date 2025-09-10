@@ -6,8 +6,11 @@ import {
   removeProduct,
   setProducts,
 } from "../../app/store/slices/productSlice";
+import { useNavigate } from "react-router-dom";
 
 export function ProductsPage() {
+  const navigate = useNavigate();
+
   const [favs, setFavs] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<ViewFilter>("all");
 
@@ -17,7 +20,10 @@ export function ProductsPage() {
 
   useEffect(() => {
     getProducts()
-      .then((data) => dispatch(setProducts(data)))
+      .then((data) => {
+        const saved = JSON.parse(localStorage.getItem("userProducts") || "[]");
+        dispatch(setProducts([...data, ...saved]));
+      })
       .catch((err) => console.error("API ERROR:", err));
   }, []);
 
@@ -45,7 +51,7 @@ export function ProductsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-          Products
+          Продукты
         </h1>
 
         {/* Фильтрация карточек */}
@@ -59,7 +65,7 @@ export function ProductsPage() {
                 : "font-medium text-gray-600 hover:text-gray-900"
             }`}
           >
-            All
+            Все
           </button>
           <button
             onClick={() => setFilter("fav")}
@@ -69,7 +75,7 @@ export function ProductsPage() {
                 : "font-medium text-gray-600 hover:text-gray-900"
             }`}
           >
-            Favourite
+            Избранное
           </button>
         </div>
       </div>
@@ -83,9 +89,7 @@ export function ProductsPage() {
             <div
               key={product.id}
               className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
-              onClick={() => {
-                // navigate(`/products/${product.id}`)
-              }}
+              onClick={() => navigate(`/products/${product.id}`)}
             >
               <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
                 <button
@@ -120,6 +124,7 @@ export function ProductsPage() {
               </div>
 
               <div className="flex flex-1 flex-col">
+                {/* Картинка */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
                   <img
                     src={product.image}
@@ -129,6 +134,7 @@ export function ProductsPage() {
                   />
                 </div>
 
+                {/* Текстовая часть */}
                 <div className="flex flex-1 flex-col p-4">
                   <h2 className="text-sm font-semibold text-gray-900 line-clamp-2">
                     {product.title}
@@ -138,6 +144,10 @@ export function ProductsPage() {
                     {product.description}
                   </p>
 
+                  {/* Spacer, растягивающийся по вертикали */}
+                  <div className="flex-1" />
+
+                  {/* Цена всегда внизу */}
                   <div className="mt-4 text-base font-bold text-gray-900">
                     ${product.price}
                   </div>
