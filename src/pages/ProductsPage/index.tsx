@@ -4,35 +4,34 @@ import type { ViewFilter } from "../../shared/types/filter";
 import { useAppDispatch, useAppSelector } from "../../app/store/hooks/hooks";
 import {
   removeProduct,
+  setFavorites,
   setProducts,
+  toggleFavorite,
 } from "../../app/store/slices/productSlice";
 import { useNavigate } from "react-router-dom";
 
 export function ProductsPage() {
   const navigate = useNavigate();
 
-  const [favs, setFavs] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<ViewFilter>("all");
 
-  const { products } = useAppSelector((state) => state.productsSlice);
+  const { products, favorites } = useAppSelector(
+    (state) => state.productsSlice
+  );
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     getProducts()
       .then((data) => {
-        const saved = JSON.parse(localStorage.getItem("userProducts") || "[]");
-        dispatch(setProducts([...data, ...saved]));
+        const saved = JSON.parse(localStorage.getItem("userProducts") || "[]"); // Продукты, добавленные пользователем из localStorage (если есть)
+        dispatch(setProducts([...data, ...saved])); // Объединяю продукты с сервера и из localStorage
+        dispatch(
+          setFavorites(JSON.parse(localStorage.getItem("favorites") || "{}"))
+        );
       })
       .catch((err) => console.error("API ERROR:", err));
   }, []);
-
-  /* Переключение избранного */
-
-  const toggleFav = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    setFavs((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
 
   /* Удаление карточки */
 
@@ -44,7 +43,7 @@ export function ProductsPage() {
   /* Фильтрация карточек */
 
   const visible = products.filter((p) =>
-    filter === "fav" ? !!favs[String(p.id)] : true
+    filter === "fav" ? !!favorites[String(p.id)] : true
   );
 
   return (
@@ -84,7 +83,7 @@ export function ProductsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {visible.map((product) => {
-          const liked = !!favs[String(product.id)];
+          const liked = !!favorites[String(product.id)];
           return (
             <div
               key={product.id}
@@ -94,7 +93,10 @@ export function ProductsPage() {
               <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
                 <button
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 backdrop-blur border border-gray-200 shadow-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  onClick={(e) => toggleFav(e, String(product.id))}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(toggleFavorite(product.id));
+                  }}
                   aria-label={liked ? "Убрать из избранного" : "В избранное"}
                 >
                   <svg

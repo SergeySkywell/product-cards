@@ -8,11 +8,11 @@ export const store = configureStore({
 });
 
 store.subscribe(() => {
-  const state = store.getState();
+  const state = store.getState(); // Получаю текущее состояние редакса
   const userProducts = state.productsSlice.products.filter(
     (product) => product.category === "user"
-  );
-  localStorage.setItem("userProducts", JSON.stringify(userProducts));
+  ); // Фильтрую только продукты, добавленные пользователем
+  localStorage.setItem("userProducts", JSON.stringify(userProducts)); // Сохраняю в localStorage только продукты, добавленные пользователем (у которых категория "user")
 });
 
 export type RootState = ReturnType<typeof store.getState>;

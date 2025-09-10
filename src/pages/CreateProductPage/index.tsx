@@ -7,10 +7,14 @@ export function CreateProductPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  // Состояния для полей формы (не сохраняю в редаксе, так как это временные данные)
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
+
+  // Обработчик отправки формы
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,11 +37,15 @@ export function CreateProductPage() {
       category: "user", // Это отдельная категория для продуктов, добавленных пользователем
     };
 
+    // Добавление продукта в редакс и переход на страницу с продуктами
+
     dispatch(addProduct(newProduct));
     navigate("/products");
   };
 
   return (
+    // Форма добавления продукта
+
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-2xl font-bold tracking-tight text-gray-900">
         Добавить продукт
