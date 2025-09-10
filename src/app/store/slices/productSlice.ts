@@ -40,10 +40,11 @@ const productSlice = createSlice({
     // Переключение избранного
 
     toggleFavorite: (state, action: PayloadAction<string | number>) => {
-      const id = String(action.payload);
-      if (state.favorites[id]) delete state.favorites[id];
-      else state.favorites[id] = true;
-      localStorage.setItem("favorites", JSON.stringify(state.favorites));
+      const id = String(action.payload); // Привожу к строке для удобства
+      if (state.favorites[id])
+        delete state.favorites[id]; // Если уже в избранном, убираю из избранного
+      else state.favorites[id] = true; // Если нет в избранном, добавляю в избранное
+      localStorage.setItem("favorites", JSON.stringify(state.favorites)); // Сохраняю в localStorage
     },
 
     // Установка избранного (при загрузке из localStorage)
