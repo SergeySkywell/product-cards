@@ -40,7 +40,7 @@ export function ProductsPage() {
     dispatch(removeProduct(id));
   };
 
-  /* Фильтрация карточек */
+  /* Отображение карточек */
 
   const visible = products.filter((p) =>
     filter === "fav" ? !!favorites[String(p.id)] : true
@@ -146,10 +146,10 @@ export function ProductsPage() {
                     {product.description}
                   </p>
 
-                  {/* Spacer, растягивающийся по вертикали */}
+                  {/* Spacer*/}
                   <div className="flex-1" />
 
-                  {/* Цена всегда внизу */}
+                  {/* Цена */}
                   <div className="mt-4 text-base font-bold text-gray-900">
                     ${product.price}
                   </div>
